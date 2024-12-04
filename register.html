@@ -49,5 +49,104 @@
     <footer>
         <p>&copy; 2024 GamersHub. Все права защищены.</p>
     </footer>
+    <script>
+        // Обработка регистрации
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const userData = {
+                username: document.getElementById('reg-username').value,
+                email: document.getElementById('reg-email').value,
+                password: document.getElementById('reg-password').value
+            };
+
+            try {
+                const response = await fetch('http://localhost:8000/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                const data = await response.json();
+                const messageDiv = document.getElementById('registerMessage');
+
+                if (response.ok) {
+                    messageDiv.textContent = 'Регистрация успешна!';
+                    messageDiv.className = 'message success';
+                    // Очистка формы
+                    document.getElementById('registerForm').reset();
+                } else {
+                    messageDiv.textContent = data.detail || 'Ошибка регистрации';
+                    messageDiv.className = 'message error';
+                }
+            } catch (error) {
+                const messageDiv = document.getElementById('registerMessage');
+                messageDiv.textContent = 'Ошибка сервера';
+                messageDiv.className = 'message error';
+            }
+        });
+        // Обработка входа
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const loginData = {
+                username: document.getElementById('login-username').value,
+                password: document.getElementById('login-password').value
+            };
+
+            try {
+                const response = await fetch('http://localhost:8000/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(loginData)
+                });
+
+                const data = await response.json();
+                const messageDiv = document.getElementById('loginMessage');
+
+                if (response.ok) {
+                    messageDiv.textContent = 'Вход выполнен успешно!';
+                    messageDiv.className = 'message success';
+                    
+                    // Сохранение информации о входе
+                    localStorage.setItem('user', loginData.username);
+                    
+                    // Перенаправление на главную страницу после успешного входа
+                    setTimeout(() => {
+                        window.location.href = '/main.html'; // Укажите путь к вашей главной странице
+                    }, 1500);
+                } else {
+                    messageDiv.textContent = data.detail || 'Ошибка входа';
+                    messageDiv.className = 'message error';
+                }
+            } catch (error) {
+                const messageDiv = document.getElementById('loginMessage');
+                messageDiv.textContent = 'Ошибка сервера';
+                messageDiv.className = 'message error';
+            }
+        });
+
+        // Проверка авторизации
+        function checkAuth() {
+            const user = localStorage.getItem('user');
+            if (user) {
+                // Если пользователь уже вошел, перенаправляем на главную
+                window.location.href = '/main.html';
+            }
+        }
+
+        // Выход
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = '/index.html';
+        }
+
+        // Проверяем авторизацию при загрузке страницы
+        checkAuth();
+    </script>
 </body>
 </html>
