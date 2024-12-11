@@ -1,21 +1,22 @@
-from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 from .config import settings
 
 # Настроим подключение к базе данных
-SQLALCHEMY_DATABASE_URL = settings.db_url
+SQLALCHEMY_DATABASE_URL = str(settings.db_url)
 
-# Создаем движок и сессию
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+engine = create_async_engine(SQLALCHEMY_DATABASE_URL, echo=True)
 
-# Базовый класс для всех моделей
+AsyncSessionLocal = sessionmaker(
+    engine, class_=AsyncSession, expire_on_commit=False
+)
+
 Base = declarative_base()
 
-# Функция для получения сессии
-def get_db():
-    db = SessionLocal()
+
+async def get_db():
+    db = AsyncSessionLocal()
     try:
         yield db
     finally:

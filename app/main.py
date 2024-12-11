@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from app.api import auth
+from twgame.app.api.auth import router
 
 app = FastAPI()
 
 # Регистрация маршрутов
-app.include_router(auth.router)
+app.include_router(router)
