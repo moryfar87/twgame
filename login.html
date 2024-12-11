@@ -10,13 +10,7 @@
 </head>
 <body>
     <header>
-        <ul>
-            <li><a href="index.html">Главная</a></li>
-            <li><a href="game.html?game=minecraft">Minecraft</a></li>
-            <li><a href="game.html?game=fortnite">Fortnite</a></li>
-            <li><a href="game.html?game=csgo">CS:GO</a></li>
-            <li><a href="game.html?game=lol">League of Legends</a></li>
-        </ul>
+       
     </header>
 
     <main>
@@ -40,5 +34,38 @@
     <footer>
         <p>&copy; 2023 GamersHub. Все права защищены.</p>
     </footer>
+    <script>
+        // Имитация базы данных пользователей
+        let users = {};
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let username = document.getElementById('loginUsername').value;
+            let password = document.getElementById('loginPassword').value;
+            
+            if (users[username] && users[username] === password) {
+                document.getElementById('message').textContent = 'Login successful!';
+                // Перенаправление на главную страницу
+                setTimeout(() => { window.location.href = 'home.html'; }, 1000);
+            } else {
+                document.getElementById('message').textContent = 'Invalid username or password';
+            }
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let username = document.getElementById('registerUsername').value;
+            let password = document.getElementById('registerPassword').value;
+            
+            if (users[username]) {
+                document.getElementById('message').textContent = 'Username already exists';
+            } else {
+                users[username] = password;
+                document.getElementById('message').textContent = 'Registration successful!';
+                // Перенаправление на главную страницу
+                setTimeout(() => { window.location.href = 'home.html'; }, 1000);
+            }
+        });
+    </script>
 </body>
 </html>
