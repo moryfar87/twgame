@@ -3,8 +3,8 @@ from pydantic import PostgresDsn
 
 
 class Settings(BaseSettings):
-    db_url: PostgresDsn = 'postgresql+asyncpg://student:student22112024@81.177.136.21:5432/twgame'
-    secret_key: str = "your-secret-key"
+    db_url: PostgresDsn = 'postgresql://student:student22112024@81.177.136.21:5432/twgame'
+    secret_key: str = "12345"
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
 
