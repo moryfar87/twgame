@@ -29,11 +29,13 @@ class Token(BaseModel):
 class PostCreate(BaseModel):
     content_text: str
 
+
 class Token(BaseModel):
     access_token: str
     token_type: str
     client_id: str
     client_secret: str
+
 
 class PostResponse(PostCreate):
     post_id: int
@@ -42,3 +44,12 @@ class PostResponse(PostCreate):
 
     class Config:
         from_attributes = True
+
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+
+class LoginResponse(BaseModel):
+    username: str
