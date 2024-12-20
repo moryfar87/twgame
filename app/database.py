@@ -5,7 +5,7 @@ from .config import settings
 # Настроим подключение к базе данных
 SQLALCHEMY_DATABASE_URL = str(settings.db_url)
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
+engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=False)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

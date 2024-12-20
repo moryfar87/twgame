@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamersHub - Регистрация</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/auth.css">
+    <link rel="stylesheet" href="/static/home.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/static/theme_switcher.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="/static/icon.jpg" alt="GamersHub Logo">
+            </div>
+            <ul>
+                <li><a href="/static/index.html">Главная</a></li>
+                <li><a href="/static/game.html?game=minecraft">Minecraft</a></li>
+                <li><a href="/static/game.html?game=fortnite">Fortnite</a></li>
+                <li><a href="/static/game.html?game=csgo">CS:GO</a></li>
+                <li><a href="/static/game.html?game=lol">League of Legends</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="/static/login.html" class="btn login-btn">Вход</a>
+                <a href="/static/register.html" class="btn register-btn">Регистрация</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <form id="registerForm" class="auth-form">
+            <h1>Регистрация</h1>
+            <div class="form-group">
+                <label for="username">Имя пользователя:</label>
+                <input type="text" id="username" name="username" required minlength="3" maxlength="20">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Пароль:</label>
+                <input type="password" id="password" name="password" required minlength="8">
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Подтвердите пароль:</label>
+                <input type="password" id="confirm-password" name="confirm-password" required minlength="8">
+            </div>
+            <div id="registerMessage" class="message"></div>
+            <button type="submit">Зарегистрироваться</button>
+            <div class="auth-links">
+                <p>Уже есть аккаунт? <a href="/static/login.html">Войти</a></p>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        // Настройка базового URL для Axios
+        axios.defaults.baseURL = 'http://localhost:8000';
+        axios.defaults.headers.common['Content-Type'] = 'application/json';
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Элементы формы
+            const usernameInput = document.getElementById('username');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirm-password');
+            const messageDiv = document.getElementById('registerMessage');
+
+            // Очистка предыдущих сообщений об ошибках
+            messageDiv.textContent = '';
+            messageDiv.className = 'message';
+
+            // Валидация формы
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                messageDiv.textContent = 'Пароли не совпадают';
+                messageDiv.className = 'message error';
+                return;
+            }
+
+            // Подготовка данных
+            const userData = {
+                username: usernameInput.value,
+                email: emailInput.value,
+                password: passwordInput.value
+            };
+
+            try {
+                // Отправка запроса с помощью Axios
+                const response = await axios.post('/register', userData);
+
+                // Обработка успешной регистрации
+                messageDiv.textContent = 'Регистрация успешна!';
+                messageDiv.className = 'message success';
+
+                // Очистка полей формы
+                usernameInput.value = '';
+                emailInput.value = '';
+                passwordInput.value = '';
+                confirmPasswordInput.value = '';
+
+                // Перенаправление на страницу входа через 2 секунды
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 5000);
+
+            } catch (error) {
+                // Обработка ошибок
+                if (error.response) {
+                    // Ошибки от сервера
+                    const errorMessage = error.response.data.detail || 'Ошибка регистрации';
+
+                    messageDiv.textContent = errorMessage;
+                    messageDiv.className = 'message error';
+
+                    // Специфические обработки ошибок
+                    switch (error.response.status) {
+                        case 400:
+                            if (errorMessage.includes('Email already registered')) {
+                                emailInput.setCustomValidity('Этот email уже зарегистрирован');
+                                emailInput.reportValidity();
+                            }
+                            break;
+                        case 422:
+                            // Ошибки валидации Pydantic
+                            if (error.response.data.detail) {
+                                const validationErrors = error.response.data.detail;
+                                validationErrors.forEach(err => {
+                                    const field = err.loc[1]; // Название поля с ошибкой
+                                    const errorText = err.msg;
+
+                                    switch (field) {
+                                        case 'username':
+                                            usernameInput.setCustomValidity(errorText);
+                                            usernameInput.reportValidity();
+                                            break;
+                                        case 'email':
+                                            emailInput.setCustomValidity(errorText);
+                                            emailInput.reportValidity();
+                                            break;
+                                        case 'password':
+                                            passwordInput.setCustomValidity(errorText);
+                                            passwordInput.reportValidity();
+                                            break;
+                                    }
+                                });
+                            }
+                            break;
+                        case 500:
+                            messageDiv.textContent = 'Внутренняя ошибка сервера. Попробуйте позже.';
+                            break;
+                    }
+                } else if (error.request) {
+                    // Ошибки сети
+                    messageDiv.textContent = 'Нет соединения с сервером. Проверьте подключение.';
+                    messageDiv.className = 'message error';
+                    console.error('Network Error:', error.request);
+                } else {
+                    // Другие ошибки
+                    messageDiv.textContent = 'Произошла неизвестная ошибка';
+                    messageDiv.className = 'message error';
+                    console.error('Error:', error.message);
+                }
+            }
+        });
+
+        // Валидация формы в реальном времени
+        const inputs = document.querySelectorAll('#registerForm input');
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                // Очистка предыдущих ошибок валидации
+                this.setCustomValidity('');
+
+                // Валидация имени пользователя
+                if (this.id === 'username') {
+                    const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+                    if (!usernameRegex.test(this.value)) {
+                        this.setCustomValidity('Имя пользователя должно содержать 3-20 символов, только буквы, цифры и подчеркивание');
+                    }
+                }
+
+                // Валидация email
+                if (this.id === 'email') {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(this.value)) {
+                        this.setCustomValidity('Введите корректный email');
+                    }
+                }
+
+                // Валидация пароля
+                if (this.id === 'password') {
+                    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+                    if (!passwordRegex.test(this.value)) {
+                        this.setCustomValidity('Пароль должен содержать минимум 8 символов, включая буквы и цифры');
+                    }
+                }
+
+                // Проверка совпадения паролей
+                if (this.id === 'confirm-password') {
+                    const passwordInput = document.getElementById('password');
+                    if (this.value !== passwordInput.value) {
+                        this.setCustomValidity('Пароли не совпадают');
+                    }
+                }
+            });
+        });
+
+        // Перехват глобальных ошибок Axios
+        axios.interceptors.response.use(
+            response => response,
+            error => {
+                // Глобальная обработка ошибок
+                if (error.response) {
+                    // Обработка ошибок аутентификации
+                    if (error.response.status === 401) {
+                        // Например, редирект на страницу входа
+                        window.location.href = '/login.html';
+                    }
+
+                    // Логирование ошибок
+                    console.error('Axios Error Response:', {
+                        data: error.response.data,
+                        status: error.response.status,
+                        headers: error.response.headers
+                    });
+                } else if (error.request) {
+                    // Ошибки сети
+                    console.error('Axios Network Error:', error.request);
+                } else {
+                    // Другие ошибки
+                    console.error('Axios Error:', error.message);
+                }
+
+                // Передаем ошибку дальше для обработки в месте вызова
+                return Promise.reject(error);
+            }
+        );
+
+        // Функция для показа toast-уведомлений
+        function showToast(message, type = 'info') {
+            // Создаем элемент toast
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+
+            // Добавляем в body
+            document.body.appendChild(toast);
+
+            // Удаляем через 3 секунды
+            setTimeout(() => {
+                toast.classList.add('fade-out');
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 500);
+            }, 3000);
+        }
+
+        // CSS для toast-уведомлений (можно добавить в отдельный файл)
+        const toastStyles = `
+            .toast {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px;
+                background-color: #333;
+                color: white;
+                border-radius: 5px;
+                z-index: 1000;
+                transition: opacity 0.5s;
+            }
+            .toast-success {
+                background-color: #4CAF50;
+            }
+            .toast-error {
+                background-color: #f44336;
+            }
+            .toast-info {
+                background-color: #2196F3;
+            }
+            .toast-fade-out {
+                opacity: 0;
+            }
+        `;
+
+        // Добавляем стили в документ
+        const styleSheet = document.createElement("style");
+        styleSheet.type = "text/css";
+        styleSheet.innerText = toastStyles;
+        document.head.appendChild(styleSheet);
+    </script>
+
+    <button id="theme-toggle" class="theme-toggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <footer>
+        <p>&copy; 2024 GamersHub. Все права защищены.</p>
+    </footer>
+</body>
+</html>

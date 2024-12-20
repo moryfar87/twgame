@@ -3,11 +3,16 @@ body {
     background-color: #f0f2f5;
     margin: 0;
     padding: 0;
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 60px; /* Добавляем отступ для параграфа */
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
 }
+
 
 .container {
     background-color: #ffffff;
@@ -16,6 +21,9 @@ body {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
+    margin-bottom: 60px; /* Добавляем отступ снизу контейнера */
+    position: relative;
+    padding-bottom: 60px; /* Добавляем отступ снизу для параграфа */
 }
 
 .register-form h2 {
@@ -64,8 +72,14 @@ input:focus {
 }
 
 .login-link {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
     text-align: center;
-    margin-top: 20px;
+    margin: 0;
+    padding: 10px 0;
+    background-color: #f0f2f5; /* Цвет фона как у body */
 }
 
 .login-link a {

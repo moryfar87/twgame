@@ -1,6 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import Optional
+from enum import Enum
 
 
 class UserBase(BaseModel):
@@ -21,30 +22,37 @@ class UserResponse(UserBase):
         from_attributes = True
 
 
-class Token(BaseModel):
-    access_token: str
-    token_type: str
 
-
-class PostCreate(BaseModel):
+class PostBase(BaseModel):
     content_text: str
 
 
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-    client_id: str
-    client_secret: str
+class GameEnum(str, Enum):
+    minecraft = "minecraft"
+    fortnite = "fortnite"
+    csgo = "csgo"
+    lol = "lol"
 
 
-class PostResponse(PostCreate):
+class PostCreate(BaseModel):
+    title: str
+    content_text: str
+    game: GameEnum
+
+
+class UserInfo(BaseModel):
+    username: str
+
+class PostResponse(BaseModel):
     post_id: int
-    user_id: int
+    title: str
+    content_text: str
+    game: str
     creation_date: datetime
+    user: UserInfo
 
     class Config:
-        from_attributes = True
-
+        orm_mode = True
 
 class LoginRequest(BaseModel):
     email: str

@@ -1,66 +1,3 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GamersHub - Главная</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="home.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</head>
-<body>
-    <header>
-        <nav>
-            <div class="logo">
-                <img src="cdf2e7c0bc636e17e6f4c40fbd7e2fda.jpg" alt="GamersHub Logo">
-            </div>
-            <ul>
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="game.html?game=minecraft">Minecraft</a></li>
-                <li><a href="game.html?game=fortnite">Fortnite</a></li>
-                <li><a href="game.html?game=csgo">CS:GO</a></li>
-                <li><a href="game.html?game=lol">League of Legends</a></li>
-            </ul>
-            <div class="auth-buttons">
-                <a href="login.html" class="btn">Вход</a>
-                <a href="register.html" class="btn">Регистрация</a>
-            </div>
-        </nav>
-    </header>
-
-    <main>
-        <h1>Добро пожаловать на GamersHub</h1>
-        <section class="popular-posts">
-            <h2>Популярные посты</h2>
-            <!-- Здесь будут отображаться популярные посты -->
-        </section>
-        <section class="recent-posts">
-            <h2>Недавние посты</h2>
-            <!-- Здесь будут отображаться недавние посты -->
-        </section>
-        <button id="theme-toggle" class="theme-toggle">
-            <i class="fas fa-moon"></i>
-        </button>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 GamersHub. Все права защищены.</p>
-    </footer>
-    <script>
-        function fetchData() {
-            fetch('http://localhost:3000')  
-                .then(response => response.json())
-                .then(data => {
-                    const contentDiv = document.getElementById('content');
-                    contentDiv.innerHTML = JSON.stringify(data);
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        fetchData();
-    </script>
-</body>
-<script>
     document.addEventListener('DOMContentLoaded', () => {
         const themeToggle = document.getElementById('theme-toggle');
         const icon = themeToggle.querySelector('i');
@@ -112,5 +49,4 @@
         });
     });
     
-</script>
-</html>
+        

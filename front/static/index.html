@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamersHub - Главная</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/home.css">
+    <script src="/static/theme_switcher.js" ></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="/static/icon.jpg" alt="GamersHub Logo">
+            </div>
+            <ul>
+                <li><a href="/static/index.html">Главная</a></li>
+                <li><a href="/static/game.html?game=minecraft">Minecraft</a></li>
+                <li><a href="/static/game.html?game=fortnite">Fortnite</a></li>
+                <li><a href="/static/game.html?game=csgo">CS:GO</a></li>
+                <li><a href="/static/game.html?game=lol">League of Legends</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="/static/login.html" class="btn login-btn">Вход</a>
+                <a href="/static/register.html" class="btn register-btn">Регистрация</a>
+                <span class="user-info" style="display: none;">
+                    <span class="username"></span>
+                    <a href="#" class="btn logout-btn">Выход</a>
+                </span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Добро пожаловать на GamersHub</h1>
+        <section class="popular-posts">
+            <h2>Популярные посты</h2>
+            <!-- Здесь будут отображаться популярные посты -->
+        </section>
+        <section class="recent-posts">
+            <h2>Недавние посты</h2>
+            <!-- Здесь будут отображаться недавние посты -->
+        </section>
+        <button id="theme-toggle" class="theme-toggle">
+            <i class="fas fa-moon"></i>
+        </button>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 GamersHub. Все права защищены.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginBtn = document.querySelector('.login-btn');
+            const registerBtn = document.querySelector('.register-btn');
+            const userInfo = document.querySelector('.user-info');
+            const usernameSpan = document.querySelector('.username');
+            const logoutBtn = document.querySelector('.logout-btn');
+
+            function updateAuthDisplay() {
+                const username = localStorage.getItem('username');
+                if (username) {
+                    loginBtn.style.display = 'none';
+                    registerBtn.style.display = 'none';
+                    userInfo.style.display = 'inline-block';
+                    usernameSpan.textContent = username;
+                } else {
+                    loginBtn.style.display = 'inline-block';
+                    registerBtn.style.display = 'inline-block';
+                    userInfo.style.display = 'none';
+                }
+            }
+
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('username');
+                updateAuthDisplay();
+            });
+
+            updateAuthDisplay();
+        });
+
+        function fetchData() {
+            fetch('http://localhost:8000')
+                .then(response => response.json())
+                .then(data => {
+                    const contentDiv = document.getElementById('content');
+                    contentDiv.innerHTML = JSON.stringify(data);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        fetchData();
+    </script>
+</body>
+</html>

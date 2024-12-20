@@ -1,0 +1,128 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GamersHub - Вход</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/auth.css">
+    <link rel="stylesheet" href="/static/home.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/static/theme_switcher.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+<header>
+    <nav>
+        <div class="logo">
+            <img src="/static/icon.jpg" alt="GamersHub Logo">
+        </div>
+        <ul>
+            <li><a href="/static/index.html">Главная</a></li>
+            <li><a href="/static/game.html?game=minecraft">Minecraft</a></li>
+            <li><a href="/static/game.html?game=fortnite">Fortnite</a></li>
+            <li><a href="/static/game.html?game=csgo">CS:GO</a></li>
+            <li><a href="/static/game.html?game=lol">League of Legends</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <a href="/static/login.html" class="btn login-btn">Вход</a>
+            <a href="/static/register.html" class="btn register-btn">Регистрация</a>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <form id="loginForm" class="auth-form">
+        <h1>Вход</h1>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div id="loginMessage" class="message"></div>
+        <button type="submit">Войти</button>
+        <div class="auth-links">
+            <p>Нет аккаунта? <a href="/static/register.html">Зарегистрироваться</a></p>
+        </div>
+    </form>
+</main>
+
+<button id="theme-toggle" class="theme-toggle">
+    <i class="fas fa-moon"></i>
+</button>
+
+<footer>
+    <p>&copy; 2024 GamersHub. Все права защищены.</p>
+</footer>
+
+<script>
+    // Глобальная конфигурация Axios
+    const api = axios.create({
+        baseURL: 'http://localhost:8000',
+        timeout: 10000,
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+    const messageDiv = document.getElementById('loginMessage');
+    const submitButton = form.querySelector('button[type="submit"]');
+
+    // Блокировка формы
+    submitButton.disabled = true;
+    submitButton.textContent = 'Вход...';
+    messageDiv.textContent = '';
+    messageDiv.className = 'message';
+
+    // Сбор данных
+    const loginData = {
+        email: form.email.value.trim(),
+        password: form.password.value
+    };
+
+    try {
+        // Отправка запроса на логин
+        const response = await api.post('/login', loginData);
+
+        // Успешный вход
+        messageDiv.textContent = 'Вход выполнен успешно!';
+        messageDiv.className = 'message success';
+
+        // Сохранение данных пользователя
+        localStorage.setItem('username', response.data.username);
+        localStorage.setItem('email', loginData.email);
+        localStorage.setItem('password', loginData.password);
+
+        // Перенаправление на главную страницу
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 1500);
+
+    } catch (error) {
+        // Обработка ошибок
+        if (error.response) {
+            messageDiv.textContent = error.response.data.detail || 'Ошибка входа';
+        } else if (error.request) {
+            messageDiv.textContent = 'Нет соединения с сервером';
+        } else {
+            messageDiv.textContent = 'Произошла неизвестная ошибка';
+        }
+        messageDiv.className = 'message error';
+    } finally {
+        // Разблокировка формы
+        submitButton.disabled = false;
+        submitButton.textContent = 'Войти';
+    }
+});
+</script>
+
+</body>
+</html>

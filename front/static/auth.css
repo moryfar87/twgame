@@ -1,0 +1,753 @@
+/* auth.css */
+:root {
+    --form-width: 400px;
+    --form-padding: 30px;
+}
+
+main {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: var(--background-color);
+}
+
+.auth-form {
+    width: 100%;
+    max-width: var(--form-width);
+    background-color: var(--card-background);
+    padding: var(--form-padding);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    animation: slideUp 0.5s ease forwards;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-form h1 {
+    text-align: center;
+    color: var(--text-color);
+    margin-bottom: 30px;
+    font-size: 2em;
+    font-weight: 700;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: 0.95em;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.1);
+}
+
+.auth-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.auth-form button:hover {
+    background-color: #e03e00;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 69, 0, 0.2);
+}
+
+.auth-form button:active {
+    transform: translateY(0);
+}
+
+.auth-links {
+    margin-top: 20px;
+    text-align: center;
+    color: var(--text-color);
+}
+
+.auth-links a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.auth-links a:hover {
+    text-decoration: underline;
+    color: #e03e00;
+}
+
+/* Стили для сообщений об ошибках */
+.error-message {
+    color: #ff3333;
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: none;
+}
+
+.error-message.visible {
+    display: block;
+    animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Стили для социальных кнопок входа */
+.social-login {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.social-login-text {
+    text-align: center;
+    color: var(--text-color);
+    margin-bottom: 15px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+.social-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.social-button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.social-button.google {
+    background-color: #DB4437;
+}
+
+.social-button.facebook {
+    background-color: #4267B2;
+}
+
+.social-button.discord {
+    background-color: #7289DA;
+}
+
+.social-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Стили для "Запомнить меня" и "Забыли пароль" */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-color);
+}
+
+.remember-me input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.forgot-password {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: color 0.2s ease;
+}
+
+.forgot-password:hover {
+    color: var(--primary-color);
+}
+
+/* Адаптивный дизайн */
+@media (max-width: 480px) {
+    .auth-form {
+        padding: 20px;
+    }
+
+    .auth-form h1 {
+        font-size: 1.8em;
+    }
+
+    .form-group input {
+        padding: 10px 12px;
+    }
+
+    .social-buttons {
+        flex-direction: column;
+    }
+
+    .social-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .form-options {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+}
+
+/* Анимация загрузки */
+.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+}
+
+.loading::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 3px solid var(--primary-color);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    z-index: 1;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Стили для подсказок валидации */
+.form-group input:invalid:not(:placeholder-shown) {
+    border-color: #ff3333;
+}
+
+.form-group input:valid:not(:placeholder-shown) {
+    border-color: #4CAF50;
+}
+
+.validation-tip {
+    position: absolute;
+    background-color: var(--card-background);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    color: var(--text-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 100;
+}
+
+.form-group input:focus + .validation-tip {
+    display: block;
+}
+
+/* Эффект перехода между формами */
+.auth-container {
+    position: relative;
+    width: 100%;
+    max-width: var(--form-width);
+}
+
+.auth-form.switching {
+    animation: formSwitch 0.3s ease-out;
+}
+
+@keyframes formSwitch {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    50% {
+        opacity: 0;
+        transform: translateX(-10%);
+    }
+    51% {
+        transform: translateX(10%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+/* auth.css - дополнение для страницы регистрации */
+
+/* Специфические стили для формы регистрации */
+.auth-form {
+    width: 100%;
+    max-width: 450px; /* Немного шире, чем форма входа */
+    background-color: var(--card-background);
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    animation: slideUp 0.5s ease forwards;
+}
+
+/* Стили для проверки надежности пароля */
+.password-strength {
+    margin-top: 5px;
+    font-size: 0.85em;
+}
+
+.password-strength-meter {
+    height: 4px;
+    background-color: var(--border-color);
+    border-radius: 2px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.password-strength-meter div {
+    height: 100%;
+    width: 0;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strength-weak {
+    background-color: #ff4444;
+}
+
+.strength-medium {
+    background-color: #ffbb33;
+}
+
+.strength-strong {
+    background-color: #00C851;
+}
+
+/* Стили для подтверждения пароля */
+.password-match {
+    color: #00C851;
+    font-size: 0.85em;
+    margin-top: 5px;
+    display: none;
+}
+
+.password-mismatch {
+    color: #ff4444;
+    font-size: 0.85em;
+    margin-top: 5px;
+    display: none;
+}
+
+/* Стили для требований к паролю */
+.password-requirements {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: var(--background-color);
+    border-radius: 6px;
+    font-size: 0.85em;
+}
+
+.requirement {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 5px 0;
+    color: var(--text-color);
+}
+
+.requirement i {
+    font-size: 0.9em;
+}
+
+.requirement.met {
+    color: #00C851;
+}
+
+/* Стили для сообщений об ошибках */
+.error-message {
+    background-color: #ffebee;
+    color: #ff4444;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 10px;
+    font-size: 0.9em;
+    display: none;
+}
+
+.success-message {
+    background-color: #e8f5e9;
+    color: #00C851;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 10px;
+    font-size: 0.9em;
+    display: none;
+}
+
+/* Стили для кнопки регистрации */
+.auth-form button[type="submit"] {
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-form button[type="submit"]::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.auth-form button[type="submit"]:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+/* Стили для ссылки "Уже есть аккаунт" */
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--text-color);
+}
+
+.login-link a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* Стили для политики конфиденциальности */
+.privacy-policy {
+    margin-top: 15px;
+    font-size: 0.85em;
+    color: var(--text-color);
+    opacity: 0.8;
+    text-align: center;
+}
+
+/* Улучшенные стили для инпутов */
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.1);
+}
+
+/* Анимация для валидации полей */
+@keyframes validationShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.form-group.error input {
+    border-color: #ff4444;
+    animation: validationShake 0.3s ease;
+}
+
+/* Стили для подсказок при заполнении */
+.input-tooltip {
+    position: absolute;
+    background-color: var(--card-background);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 200px;
+    z-index: 100;
+    display: none;
+}
+
+.form-group input:focus + .input-tooltip {
+    display: block;
+}
+
+/* Адаптивные стили для мобильных устройств */
+@media (max-width: 480px) {
+    .auth-form {
+        padding: 20px;
+        margin: 10px;
+    }
+
+    .auth-form h1 {
+        font-size: 1.8em;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group input {
+        padding: 10px;
+    }
+
+    .password-requirements {
+        font-size: 0.8em;
+    }
+}
+
+/* Стили для загрузки */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    display: none;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--background-color);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Стили для header */
+header {
+    background-color: var(--card-background);
+    padding: 15px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+}
+
+header ul {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+header ul li a {
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+
+header ul li a:hover {
+    background-color: var(--hover-color);
+    transform: translateY(-2px);
+}
+
+/* Стили для footer */
+footer {
+    background-color: var(--card-background);
+    padding: 30px 20px;
+    margin-top: 50px;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+}
+
+footer p {
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+/* Дополнительные стили для формы */
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+/* Стили для успешной валидации */
+.form-group.success input {
+    border-color: #4CAF50;
+}
+
+.form-group.success::after {
+    content: '✓';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #4CAF50;
+}
+
+/* Анимации для формы */
+.auth-form {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: formAppear 0.5s ease forwards;
+}
+
+@keyframes formAppear {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Медиа-запросы для различных размеров экрана */
+@media (max-width: 768px) {
+    header ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 0 10px;
+    }
+
+    .auth-form {
+        margin: 60px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    header ul li a {
+        padding: 6px 12px;
+        font-size: 0.9em;
+    }
+
+    .auth-form h1 {
+        font-size: 1.6em;
+    }
+}
+.theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.theme-toggle:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle i {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .theme-toggle i.fa-moon {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle i.fa-sun {
+    display: inline-block;
+}
+
+[data-theme="light"] .theme-toggle i.fa-moon {
+    display: inline-block;
+}
+
+[data-theme="light"] .theme-toggle i.fa-sun {
+    display: none;
+}
